@@ -195,3 +195,95 @@ price and location. The Business Logic validates and parses the filters, queries
 the database, formats the results, and returns the list to the client.
 
 ---
+---
+
+## Task 3: Documentation Compilation
+
+### Introduction
+
+This document serves as the comprehensive technical blueprint for **HBnB Evolution**,
+a simplified AirBnB-like application. It covers the full architecture and design of
+the system, including the layered architecture, business logic entities, and API
+interaction flows.
+
+The purpose of this document is to guide the implementation phases of the project
+by providing a clear and detailed reference for developers. All diagrams follow
+UML notation and were created using Mermaid.js.
+
+---
+
+### Project Overview
+
+HBnB Evolution allows users to:
+- **Register and manage** their user profiles
+- **List properties** (places) with details like price and location
+- **Leave reviews** for places they have visited
+- **Manage amenities** that can be associated with places
+
+---
+
+### Architecture Summary
+
+The application is built on a **three-layer architecture**:
+
+| Layer | Responsibility |
+|---|---|
+| Presentation | Exposes REST API endpoints to the client |
+| Business Logic | Validates data and applies business rules |
+| Persistence | Stores and retrieves data from the database |
+
+The **Facade Pattern** acts as the bridge between the Presentation Layer and
+the Business Logic Layer, providing a clean and unified interface.
+
+---
+
+### Design Decisions
+
+**Why Layered Architecture?**
+Separating concerns into three distinct layers makes the application easier to
+maintain, test, and scale. Each layer can be modified independently without
+affecting the others.
+
+**Why the Facade Pattern?**
+The Facade Pattern simplifies communication between layers by hiding internal
+complexity. The Presentation Layer never directly accesses the database — it
+always goes through the Business Logic Layer.
+
+**Why a BaseModel?**
+All entities (User, Place, Review, Amenity) share common attributes: `id`,
+`created_at`, and `updated_at`. Centralizing these in a BaseModel avoids
+code duplication and enforces consistency.
+
+**Why UUID for IDs?**
+UUIDs guarantee uniqueness across distributed systems and avoid predictable
+sequential IDs, which improves security.
+
+---
+
+### Entity Relationship Summary
+
+| Entity | Relationship |
+|---|---|
+| User → Place | A user can own many places |
+| User → Review | A user can write many reviews |
+| Place → Review | A place can have many reviews |
+| Place ↔ Amenity | A place can have many amenities; an amenity can belong to many places |
+
+---
+
+### API Flow Summary
+
+| API Call | Method | Endpoint |
+|---|---|---|
+| User Registration | POST | /users |
+| Place Creation | POST | /places |
+| Review Submission | POST | /places/{place_id}/reviews |
+| Fetch List of Places | GET | /places |
+
+---
+
+### Conclusion
+
+This technical document provides a complete blueprint for HBnB Evolution.
+The diagrams and explanatory notes defined here will guide all implementation
+phases, ensuring consistency between the design and the final product.
