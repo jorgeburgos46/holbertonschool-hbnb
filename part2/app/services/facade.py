@@ -39,6 +39,48 @@ class HBnBFacade:
         """Update user by ID."""
         self.user_repo.update(user_id, user_data)
         return self.user_repo.get(user_id)
+    # Review methods
+    def create_review(self, review_data):
+        """Create a new review."""
+        user = self.user_repo.get(review_data.get('user_id'))
+        if not user:
+            raise ValueError("User not found")
+        place = self.place_repo.get(review_data.get('place_id'))
+        if not place:
+            raise ValueError("Place not found")
+        review = Review(
+            text=review_data['text'],
+            rating=review_data['rating'],
+            place=place,
+            user=user
+        )
+        self.review_repo.add(review)
+        place.add_review(review)
+        return review
+
+    def get_review(self, review_id):
+        """Get review by ID."""
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        """Get all reviews."""
+        return self.review_repo.get_all()
+
+    def get_reviews_by_place(self, place_id):
+        """Get all reviews for a specific place."""
+        place = self.place_repo.get(place_id)
+        if not place:
+            return None
+        return place.reviews
+
+    def update_review(self, review_id, review_data):
+        """Update review by ID."""
+        self.review_repo.update(review_id, review_data)
+        return self.review_repo.get(review_id)
+
+    def delete_review(self, review_id):
+        """Delete review by ID."""
+        self.review_repo.delete(review_id)
 
     # Amenity methods
     def create_amenity(self, amenity_data):
@@ -115,3 +157,4 @@ class HBnBFacade:
             del place_data['amenities']
         self.place_repo.update(place_id, place_data)
         return self.place_repo.get(place_id)
+    
